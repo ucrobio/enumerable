@@ -49,6 +49,34 @@ func TestEnumerableFunUnitSuite(t *testing.T) {
 					return Value(sum).To(BeEq(18))
 				}),
 			),
+
+			Describe(
+				".Select",
+
+				It("selects pair numbers", func() error {
+					sum := 0
+
+					Each(func(value int) { sum += value },
+						Select(func(value int) bool { return value%2 == 0 }, slice.Value()),
+					)
+
+					return Value(sum).To(BeEq(2))
+				}),
+			),
+
+			Describe(
+				".Reject",
+
+				It("selects odd numbers", func() error {
+					sum := 0
+
+					Each(func(value int) { sum += value },
+						Reject(func(value int) bool { return value%2 == 0 }, slice.Value()),
+					)
+
+					return Value(sum).To(BeEq(4))
+				}),
+			),
 		),
 
 		func(err error) { t.Fatal(err) },
